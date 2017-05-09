@@ -1,0 +1,70 @@
+# 1)
+n<-1000
+mu <- 3
+sigma <- 2
+chisq0<-function(n){
+    df<-n-1
+    X<-rchisq(1,df)
+    return(X)
+}
+ 
+# 2)
+ech<-replicate(n,chisq0(n))
+hist(ech,freq=FALSE)
+ 
+# 3)
+curve(dchisq(x, df=n-1), add = TRUE)
+ 
+# 4)
+t0<-function(n){
+    df<-n-1
+    X<-rt(1,df)
+    return(X)
+}
+ 
+ech2<-replicate(n,t0(n))
+hist(ech2,freq=FALSE)
+curve(dt(x, df=n-1), add = TRUE)
+ 
+# NB :
+x<-seq(0,10,length.out=200)
+plot(dt(x, df=n-1))
+ 
+# 5)
+.
+ 
+# 6)
+n<-1000
+mean<-0
+sd<-1
+ech3<-rnorm(n=n, mean=mean, sd=sd)
+ 
+error<-qnorm(0.975)*s/sqrt(n) 
+ 
+left<-mean(ech3)-error
+left
+right<-mean(ech3)+error
+right
+ 
+ 
+# 7)
+.
+ 
+# 8)
+n<-1000
+mean<-0
+sd<-1
+ech4<-rnorm(n=n, mean=mean, sd=sd)
+error<-qt(0.975,df=n-1)*sd(ech4)/sqrt(n)
+alpha<-0.05
+t.test(ech4, conf.level=1 - alpha)$conf.int
+ 
+mean(ech4)+error
+mean(ech4)-error
+ 
+# 9)
+gen_IC <- function(ech, alpha){
+error<-qt(1-alpha/2,df=(length(ech))-1)*sd(ech)/sqrt(length(ech))
+return(c(mean(ech)-error, mean(ech)+error))
+}
+gen_IC(ech4,0.05)
